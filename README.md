@@ -1,4 +1,5 @@
 # golang-rest-api
+
 A sample Golang REST API written in Golang with minimal business functionalities but should have all non-functional areas covered up.
 
 - Microservices
@@ -17,7 +18,8 @@ A sample Golang REST API written in Golang with minimal business functionalities
 - Makefile
 - Docker-Compose for local running
 
-//TODO: AWS Cloud Specifics
+## TODO: AWS Cloud Specifics
+
 - NoSql database
 - S3 Storage
 - AWS SnS/SQS

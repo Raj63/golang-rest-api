@@ -1,0 +1,66 @@
+default_stages: [commit]
+
+fail_fast: true
+
+repos:
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+        name: Git - Check Commit Message
+
+  - repo: https://github.com/tekwizely/pre-commit-golang
+    rev: master
+    hooks:
+    #
+    # Go Build
+    #
+    -   id: go-build-mod
+    #
+    # Go Mod Tidy
+    #
+    -   id: go-mod-tidy
+    #
+    # Go Test
+    #
+    -   id: go-test-mod
+    #
+    # Go Vet
+    #
+    -   id: go-vet-mod
+    #
+    # GoSec
+    #
+    -   id: go-sec-mod
+    #
+    # StaticCheck
+    #
+    -   id: go-staticcheck-mod
+    #
+    # Formatters
+    #
+    -   id: go-fmt
+    #
+    # Style Checkers
+    #
+    -   id: go-lint
+    -   id: go-critic
+    #
+    # GolangCI-Lint
+    # - Fast Multi-Linter
+    # - Can be configured to replace MOST other hooks
+    # - Supports repo config file for configuration
+    # - https://github.com/golangci/golangci-lint
+    #
+    -   id: golangci-lint-mod
+    #
+    # Invoking Custom Go Tools
+    # - Configured *entirely* through the `args` attribute, ie:
+    #   args: [ go, test, ./... ]
+    # - Use arg `--hook:error-on-output` to indicate that any output from the tool
+    #   should be treated as an error.
+    # - Use the `name` attribute to provide better messaging when the hook runs
+    # - Use the `alias` attribute to be able to invoke your hook via `pre-commit run`
+    #
+    -   id: my-cmd
+        args: [ go, generate, ./... ]
