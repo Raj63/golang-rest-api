@@ -1,0 +1,164 @@
+basePath: /v1
+definitions:
+  github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu:
+    properties:
+      current:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu'
+        type: array
+      limit:
+        type: integer
+      nextCursor:
+        type: integer
+      numPages:
+        type: integer
+      prevCursor:
+        type: integer
+      total:
+        type: integer
+    type: object
+  github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu:
+    properties:
+      created_at:
+        type: string
+      description:
+        example: Some Description
+        type: string
+      id:
+        example: 123
+        type: integer
+      name:
+        example: Paracetamol
+        type: string
+      updated_at:
+        example: "2021-02-24 20:19:39"
+        type: string
+    type: object
+  menu.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  menu.NewMenuRequest:
+    properties:
+      description:
+        example: Something
+        type: string
+      ean_code:
+        example: "122000000021"
+        type: string
+      laboratory:
+        example: Roche
+        type: string
+      name:
+        example: Paracetamol
+        type: string
+    required:
+    - description
+    - ean_code
+    - laboratory
+    - name
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: biswas.rajesh63@gmail.com
+    name: Rajesh Kumar Biswas
+    url: http://github.com/Raj63
+  description: Documentation's Golang REST APIs
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Golang REST APIs
+  version: "2.0"
+paths:
+  /menu:
+    get:
+      description: Get all Menus on the system
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+      summary: Get all Menus
+      tags:
+      - menu
+    post:
+      consumes:
+      - application/json
+      description: Create new menu on the system
+      parameters:
+      - description: body data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/menu.NewMenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+      summary: Create New Menu
+      tags:
+      - menu
+  /menu/{menu_id}:
+    get:
+      description: Get Menus by ID on the system
+      parameters:
+      - description: id of menu
+        in: path
+        name: menu_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+      summary: Get menus by ID
+      tags:
+      - menu
+swagger: "2.0"

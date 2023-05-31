@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    restart: on-failure
+    depends_on:
+      - db
+    environment:
+      - APP_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - DB_NAME=restaurant
+
+  db:
+    platform: linux/x86_64
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=restaurant
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
