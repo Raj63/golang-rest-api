@@ -9,10 +9,11 @@ import (
 // MenuRoutes is a function that contains all menu routes
 func MenuRoutes(router *gin.RouterGroup, controller *menuController.Controller) {
 
-	routerMenu := router.Group("/menu")
+	routerMenu := router.Group("/menus")
 	{
 		routerMenu.POST("/", controller.NewMenu)
 		routerMenu.GET("/:id", controller.GetMenusByID)
+		routerMenu.GET("/top", controller.GetTopMenus)
 		routerMenu.GET("/", controller.GetAllMenus)
 		routerMenu.DELETE("/:id", controller.DeleteMenu)
 	}

@@ -22,16 +22,16 @@ type Controller struct {
 
 // NewMenu godoc
 //
-//	@Tags			menu
+//	@Tags			menus
 //	@Summary		Create New Menu
 //	@Description	Create new menu on the system
 //	@Accept			json
 //	@Produce		json
 //	@Param			data	body		NewMenuRequest	true	"body data"
-//	@Success		200		{object}	domainMenu.Menu
+//	@Success		201		{object}	domainMenu.Menu
 //	@Failure		400		{object}	MessageResponse
 //	@Failure		500		{object}	MessageResponse
-//	@Router			/menu [post]
+//	@Router			/menus [post]
 func (c *Controller) NewMenu(ctx *gin.Context) {
 	var request NewMenuRequest
 
@@ -43,31 +43,32 @@ func (c *Controller) NewMenu(ctx *gin.Context) {
 	newMenu := useCaseMenu.NewMenu{
 		Name:        request.Name,
 		Description: request.Description,
+		Price:       request.Price,
 	}
 
 	var result *domainMenu.Menu
 	var err error
 
-	result, err = c.MenuService.Create(&newMenu)
+	result, err = c.MenuService.Create(ctx.Request.Context(), &newMenu)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
 		return
 	}
 
-	ctx.JSON(http.StatusOK, result)
+	ctx.JSON(http.StatusCreated, result)
 }
 
 // GetAllMenus godoc
 //
-//	@Tags			menu
+//	@Tags			menus
 //	@Summary		Get all Menus
 //	@Description	Get all Menus on the system
-//	@Param			limit	query		string	true	"limit"
-//	@Param			page	query		string	true	"page"
+//	@Param			limit	query		int64	true	"limit"
+//	@Param			page	query		int64	true	"page"
 //	@Success		200		{object}	[]useCaseMenu.PaginationResultMenu
 //	@Failure		400		{object}	MessageResponse
 //	@Failure		500		{object}	MessageResponse
-//	@Router			/menu [get]
+//	@Router			/menus [get]
 func (c *Controller) GetAllMenus(ctx *gin.Context) {
 	pageStr := ctx.DefaultQuery("page", "1")
 	limitStr := ctx.DefaultQuery("limit", "20")
@@ -85,37 +86,62 @@ func (c *Controller) GetAllMenus(ctx *gin.Context) {
 		return
 	}
 
-	menus, err := c.MenuService.GetAll(page, limit)
+	menus, err := c.MenuService.GetAll(ctx.Request.Context(), page, limit)
 	if err != nil {
-		appError := domainErrors.NewAppErrorWithType(domainErrors.UnknownError)
-		_ = ctx.Error(appError)
+		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
 		return
 	}
 	ctx.JSON(http.StatusOK, menus)
 }
 
-// GetMenusByID godoc
+// GetTopMenus godoc
 //
-//	@Tags			menu
-//	@Summary		Get menus by ID
-//	@Description	Get Menus by ID on the system
-//	@Param			menu_id	path		int	true	"id of menu"
-//	@Success		200			{object}	domainMenu.Menu
-//	@Failure		400			{object}	MessageResponse
-//	@Failure		500			{object}	MessageResponse
-//	@Router			/menu/{menu_id} [get]
-func (c *Controller) GetMenusByID(ctx *gin.Context) {
-	menuID, err := strconv.Atoi(ctx.Param("id"))
+//		@Tags			menus
+//		@Summary		Get top menus by count
+//		@Description	Get Top Menus by count on the system
+//	    @Param          count       query int true     "top count"
+//		@Success		200			{object}	[]domainMenu.Menu
+//		@Failure		400			{object}	MessageResponse
+//		@Failure		500			{object}	MessageResponse
+//		@Router			/menus/top [get]
+func (c *Controller) GetTopMenus(ctx *gin.Context) {
+	count, err := strconv.Atoi(ctx.Query("count"))
 	if err != nil {
 		appError := domainErrors.NewAppError(errors.New("menu id is invalid"), domainErrors.ValidationError)
 		_ = ctx.Error(appError)
 		return
 	}
 
-	domainMenu, err := c.MenuService.GetByID(menuID)
+	domainMenu, err := c.MenuService.GetByTopCount(ctx.Request.Context(), count)
 	if err != nil {
-		appError := domainErrors.NewAppError(err, domainErrors.ValidationError)
+		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, domainMenu)
+}
+
+// GetMenusByID godoc
+//
+//	@Tags			menus
+//	@Summary		Get menus by ID
+//	@Description	Get Menus by ID on the system
+//	@Param			menu_id	path		int64	true	"id of menu"
+//	@Success		200			{object}	domainMenu.Menu
+//	@Failure		400			{object}	MessageResponse
+//	@Failure		500			{object}	MessageResponse
+//	@Router			/menus/{menu_id} [get]
+func (c *Controller) GetMenusByID(ctx *gin.Context) {
+	menuID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		appError := domainErrors.NewAppError(errors.New("menu id is invalid"), domainErrors.ValidationError)
 		_ = ctx.Error(appError)
+		return
+	}
+
+	domainMenu, err := c.MenuService.GetByID(ctx.Request.Context(), menuID)
+	if err != nil {
+		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
 		return
 	}
 
@@ -123,17 +149,26 @@ func (c *Controller) GetMenusByID(ctx *gin.Context) {
 }
 
 // DeleteMenu is the controller to delete a menu
+//
+//	@Tags			menus
+//	@Summary		Delete menus by ID
+//	@Description	Delete Menus by ID on the system
+//	@Param			menu_id	path		int64	true	"id of menu"
+//	@Success		200			{object}	MessageResponse
+//	@Failure		400			{object}	MessageResponse
+//	@Failure		500			{object}	MessageResponse
+//	@Router			/menus/{menu_id} [delete]
 func (c *Controller) DeleteMenu(ctx *gin.Context) {
-	menuID, err := strconv.Atoi(ctx.Param("id"))
+	menuID, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
-		appError := domainErrors.NewAppError(errors.New("param id is necessary in the url"), domainErrors.ValidationError)
+		appError := domainErrors.NewAppError(errors.New("param menu id is necessary in the url"), domainErrors.ValidationError)
 		_ = ctx.Error(appError)
 		return
 	}
 
-	err = c.MenuService.Delete(menuID)
+	err = c.MenuService.Delete(ctx.Request.Context(), menuID)
 	if err != nil {
-		_ = ctx.Error(err)
+		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "resource deleted successfully"})

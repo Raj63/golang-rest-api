@@ -9,5 +9,6 @@ func (n *NewMenu) toDomainMapper() *domainMenu.Menu {
 	return &domainMenu.Menu{
 		Name:        n.Name,
 		Description: n.Description,
+		Price:       n.Price,
 	}
 }

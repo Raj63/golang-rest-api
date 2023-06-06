@@ -1,5 +1,40 @@
 basePath: /v1
 definitions:
+  diner.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  diner.NewDinerRequest:
+    properties:
+      name:
+        example: Paracetamol
+        type: string
+      table_no:
+        example: 101
+        type: integer
+    required:
+    - name
+    type: object
+  github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner:
+    properties:
+      current:
+        type: integer
+      data:
+        items:
+          $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner'
+        type: array
+      limit:
+        type: integer
+      nextCursor:
+        type: integer
+      numPages:
+        type: integer
+      prevCursor:
+        type: integer
+      total:
+        type: integer
+    type: object
   github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu:
     properties:
       current:
@@ -19,6 +54,23 @@ definitions:
       total:
         type: integer
     type: object
+  github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner:
+    properties:
+      created_at:
+        type: string
+      id:
+        example: 123
+        type: integer
+      name:
+        example: Mr. Smith
+        type: string
+      table_no:
+        example: 101
+        type: integer
+      updated_at:
+        example: "2021-02-24 20:19:39"
+        type: string
+    type: object
   github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu:
     properties:
       created_at:
@@ -30,8 +82,51 @@ definitions:
         example: 123
         type: integer
       name:
-        example: Paracetamol
+        example: Hyderabadi Dum Briyani
         type: string
+      price:
+        example: 200.5
+        type: number
+      updated_at:
+        example: "2021-02-24 20:19:39"
+        type: string
+    type: object
+  github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest:
+    properties:
+      created_at:
+        type: string
+      diner_id:
+        example: 1
+        type: integer
+      id:
+        example: 123
+        type: integer
+      menu_id:
+        example: 3
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+    type: object
+  github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse:
+    properties:
+      created_at:
+        type: string
+      diner_name:
+        example: Mr. Smith
+        type: string
+      id:
+        example: 123
+        type: integer
+      menu_description:
+        example: Hyderabadi Chicken Dum Briyani
+        type: string
+      menu_name:
+        example: HCDB
+        type: string
+      quantity:
+        example: 2
+        type: integer
       updated_at:
         example: "2021-02-24 20:19:39"
         type: string
@@ -46,20 +141,37 @@ definitions:
       description:
         example: Something
         type: string
-      ean_code:
-        example: "122000000021"
-        type: string
-      laboratory:
-        example: Roche
-        type: string
       name:
         example: Paracetamol
         type: string
+      price:
+        example: 200.5
+        type: number
     required:
     - description
-    - ean_code
-    - laboratory
     - name
+    - price
+    type: object
+  order.MessageResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  order.NewOrderRequest:
+    properties:
+      diner_id:
+        example: 1
+        type: integer
+      menu_id:
+        example: 3
+        type: integer
+      quantity:
+        example: 2
+        type: integer
+    required:
+    - diner_id
+    - menu_id
+    - quantity
     type: object
 host: localhost:8080
 info:
@@ -75,7 +187,117 @@ info:
   title: Golang REST APIs
   version: "2.0"
 paths:
-  /menu:
+  /diners:
+    get:
+      description: Get all Diners on the system
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+      summary: Get all Diners
+      tags:
+      - diners
+    post:
+      consumes:
+      - application/json
+      description: Create new diner on the system
+      parameters:
+      - description: body data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/diner.NewDinerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+      summary: Create New Diner
+      tags:
+      - diners
+  /diners/{diner_id}:
+    delete:
+      description: Delete Diners by ID on the system
+      parameters:
+      - description: id of diner
+        in: path
+        name: diner_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+      summary: Delete diners by ID
+      tags:
+      - diners
+    get:
+      description: Get Diners by ID on the system
+      parameters:
+      - description: id of diner
+        in: path
+        name: diner_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/diner.MessageResponse'
+      summary: Get diners by ID
+      tags:
+      - diners
+  /menus:
     get:
       description: Get all Menus on the system
       parameters:
@@ -83,12 +305,12 @@ paths:
         in: query
         name: limit
         required: true
-        type: string
+        type: integer
       - description: page
         in: query
         name: page
         required: true
-        type: string
+        type: integer
       responses:
         "200":
           description: OK
@@ -106,7 +328,7 @@ paths:
             $ref: '#/definitions/menu.MessageResponse'
       summary: Get all Menus
       tags:
-      - menu
+      - menus
     post:
       consumes:
       - application/json
@@ -121,8 +343,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu'
         "400":
@@ -135,8 +357,32 @@ paths:
             $ref: '#/definitions/menu.MessageResponse'
       summary: Create New Menu
       tags:
-      - menu
-  /menu/{menu_id}:
+      - menus
+  /menus/{menu_id}:
+    delete:
+      description: Delete Menus by ID on the system
+      parameters:
+      - description: id of menu
+        in: path
+        name: menu_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+      summary: Delete menus by ID
+      tags:
+      - menus
     get:
       description: Get Menus by ID on the system
       parameters:
@@ -160,5 +406,114 @@ paths:
             $ref: '#/definitions/menu.MessageResponse'
       summary: Get menus by ID
       tags:
-      - menu
+      - menus
+  /menus/top:
+    get:
+      description: Get Top Menus by count on the system
+      parameters:
+      - description: top count
+        in: query
+        name: count
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/menu.MessageResponse'
+      summary: Get top menus by count
+      tags:
+      - menus
+  /orders:
+    post:
+      consumes:
+      - application/json
+      description: Create new order on the system
+      parameters:
+      - description: body data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/order.NewOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+      summary: Create New order
+      tags:
+      - orders
+  /orders/{diner_id}:
+    get:
+      description: Get orders by Diner ID on the system
+      parameters:
+      - description: id of diner
+        in: path
+        name: diner_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+      summary: Get orders by Diner ID
+      tags:
+      - orders
+  /orders/{order_id}:
+    delete:
+      description: Delete orders by ID on the system
+      parameters:
+      - description: id of order
+        in: path
+        name: order_id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/order.MessageResponse'
+      summary: Delete orders by ID
+      tags:
+      - orders
 swagger: "2.0"

@@ -14,6 +14,7 @@ import (
 	"github.com/chenjiandongx/ginprom"
 	inspector "github.com/fatihkahveci/gin-inspector"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/contrib/secure"
 	"github.com/gin-gonic/gin"
@@ -186,6 +187,11 @@ func AddBasicHandlers(router *gin.Engine, config *MiddlewaresConfig, logger *log
 
 		// register the `/metrics` route.
 		router.GET("/metrics", ginprom.PromHandler(promhttp.Handler()))
+	}
+
+	// Setup Debug PPROF handler before the API handlers
+	if config.DebugEnabled {
+		pprof.Register(router)
 	}
 
 	// Setup Error handler

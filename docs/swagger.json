@@ -18,23 +18,189 @@
     "host": "localhost:8080",
     "basePath": "/v1",
     "paths": {
-        "/menu": {
+        "/diners": {
             "get": {
-                "description": "Get all Menus on the system",
+                "description": "Get all Diners on the system",
                 "tags": [
-                    "menu"
+                    "diners"
                 ],
-                "summary": "Get all Menus",
+                "summary": "Get all Diners",
                 "parameters": [
                     {
-                        "type": "string",
+                        "type": "integer",
                         "description": "limit",
                         "name": "limit",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "type": "string",
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new diner on the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "diners"
+                ],
+                "summary": "Create New Diner",
+                "parameters": [
+                    {
+                        "description": "body data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/diner.NewDinerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/diners/{diner_id}": {
+            "get": {
+                "description": "Get Diners by ID on the system",
+                "tags": [
+                    "diners"
+                ],
+                "summary": "Get diners by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of diner",
+                        "name": "diner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete Diners by ID on the system",
+                "tags": [
+                    "diners"
+                ],
+                "summary": "Delete diners by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of diner",
+                        "name": "diner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/diner.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/menus": {
+            "get": {
+                "description": "Get all Menus on the system",
+                "tags": [
+                    "menus"
+                ],
+                "summary": "Get all Menus",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
                         "description": "page",
                         "name": "page",
                         "in": "query",
@@ -74,7 +240,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "menu"
+                    "menus"
                 ],
                 "summary": "Create New Menu",
                 "parameters": [
@@ -89,8 +255,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu"
                         }
@@ -110,11 +276,52 @@
                 }
             }
         },
-        "/menu/{menu_id}": {
+        "/menus/top": {
+            "get": {
+                "description": "Get Top Menus by count on the system",
+                "tags": [
+                    "menus"
+                ],
+                "summary": "Get top menus by count",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "top count",
+                        "name": "count",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/menu.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/menu.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/menus/{menu_id}": {
             "get": {
                 "description": "Get Menus by ID on the system",
                 "tags": [
-                    "menu"
+                    "menus"
                 ],
                 "summary": "Get menus by ID",
                 "parameters": [
@@ -146,10 +353,224 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete Menus by ID on the system",
+                "tags": [
+                    "menus"
+                ],
+                "summary": "Delete menus by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of menu",
+                        "name": "menu_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/menu.MessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/menu.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/menu.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "post": {
+                "description": "Create new order on the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Create New order",
+                "parameters": [
+                    {
+                        "description": "body data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order.NewOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{diner_id}": {
+            "get": {
+                "description": "Get orders by Diner ID on the system",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Get orders by Diner ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of diner",
+                        "name": "diner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{order_id}": {
+            "delete": {
+                "description": "Delete orders by ID on the system",
+                "tags": [
+                    "orders"
+                ],
+                "summary": "Delete orders by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id of order",
+                        "name": "order_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/order.MessageResponse"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "diner.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "diner.NewDinerRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Paracetamol"
+                },
+                "table_no": {
+                    "type": "integer",
+                    "example": 101
+                }
+            }
+        },
+        "github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "nextCursor": {
+                    "type": "integer"
+                },
+                "numPages": {
+                    "type": "integer"
+                },
+                "prevCursor": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu": {
             "type": "object",
             "properties": {
@@ -179,6 +600,30 @@
                 }
             }
         },
+        "github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Mr. Smith"
+                },
+                "table_no": {
+                    "type": "integer",
+                    "example": 101
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2021-02-24 20:19:39"
+                }
+            }
+        },
         "github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu": {
             "type": "object",
             "properties": {
@@ -195,7 +640,67 @@
                 },
                 "name": {
                     "type": "string",
-                    "example": "Paracetamol"
+                    "example": "Hyderabadi Dum Briyani"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 200.5
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2021-02-24 20:19:39"
+                }
+            }
+        },
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "diner_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "menu_id": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 2
+                }
+            }
+        },
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "diner_name": {
+                    "type": "string",
+                    "example": "Mr. Smith"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 123
+                },
+                "menu_description": {
+                    "type": "string",
+                    "example": "Hyderabadi Chicken Dum Briyani"
+                },
+                "menu_name": {
+                    "type": "string",
+                    "example": "HCDB"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 2
                 },
                 "updated_at": {
                     "type": "string",
@@ -215,26 +720,51 @@
             "type": "object",
             "required": [
                 "description",
-                "ean_code",
-                "laboratory",
-                "name"
+                "name",
+                "price"
             ],
             "properties": {
                 "description": {
                     "type": "string",
                     "example": "Something"
                 },
-                "ean_code": {
-                    "type": "string",
-                    "example": "122000000021"
-                },
-                "laboratory": {
-                    "type": "string",
-                    "example": "Roche"
-                },
                 "name": {
                     "type": "string",
                     "example": "Paracetamol"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 200.5
+                }
+            }
+        },
+        "order.MessageResponse": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "order.NewOrderRequest": {
+            "type": "object",
+            "required": [
+                "diner_id",
+                "menu_id",
+                "quantity"
+            ],
+            "properties": {
+                "diner_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "menu_id": {
+                    "type": "integer",
+                    "example": 3
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 2
                 }
             }
         }

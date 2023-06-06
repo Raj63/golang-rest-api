@@ -9,13 +9,13 @@ import (
 
 // Menu is a struct that contains the menu model
 type Menu struct {
-	ID          int       `json:"id" example:"123" gorm:"primaryKey"`
-	Name        string    `json:"name" example:"Paracetamol" gorm:"unique"`
-	Description string    `json:"description" example:"Some Description"`
-	EANCode     string    `json:"ean_code" example:"9900000124" gorm:"unique"`
-	Laboratory  string    `json:"laboratory" example:"Roche"`
-	CreatedAt   time.Time `json:"created_at,omitempty" example:"2021-02-24 20:19:39" gorm:"autoCreateTime:mili"`
-	UpdatedAt   time.Time `json:"updated_at,omitempty" example:"2021-02-24 20:19:39" gorm:"autoUpdateTime:mili"`
+	ID          int64     `db:"id" example:"123"`
+	Name        string    `db:"name" example:"Hyderabadi Dum Briyani"`
+	Description string    `db:"description" example:"Some Description"`
+	Price       int       `db:"price" example:"20050"`
+	CreatedAt   time.Time `db:"created_at" example:"2021-02-24 20:19:39"`
+	UpdatedAt   time.Time `db:"updated_at" example:"2021-02-24 20:19:39"`
+	Count       int       `db:"count" example:"3"`
 }
 
 // TableName overrides the table name used by User to `users`

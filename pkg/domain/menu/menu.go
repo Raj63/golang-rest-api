@@ -7,9 +7,10 @@ import (
 
 // Menu is a struct that contains the menu information
 type Menu struct {
-	ID          int       `json:"id" example:"123"`
-	Name        string    `json:"name" example:"Paracetamol"`
+	ID          int64     `json:"id" example:"123"`
+	Name        string    `json:"name" example:"Hyderabadi Dum Briyani"`
 	Description string    `json:"description" example:"Some Description"`
+	Price       float64   `json:"price" example:"200.50"`
 	CreatedAt   time.Time `json:"created_at,omitempty" `
 	UpdatedAt   time.Time `json:"updated_at,omitempty" example:"2021-02-24 20:19:39"`
 }

@@ -5,7 +5,6 @@ go 1.19
 require (
 	github.com/RaMin0/gin-health-check v0.0.0-20180807004848-a677317b3f01
 	github.com/XSAM/otelsql v0.21.0
-	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/chenjiandongx/ginprom v0.0.0-20210617023641-6c809602c38a
 	github.com/fatihkahveci/gin-inspector v0.0.0-20190208215146-ffbe3a21bb6b
 	github.com/gin-contrib/cors v1.4.0
@@ -96,6 +95,8 @@ require (
 )
 
 require (
+	github.com/caarlos0/env/v6 v6.10.1
+	github.com/gin-contrib/pprof v1.4.0
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
