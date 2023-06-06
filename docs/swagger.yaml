@@ -91,7 +91,7 @@ definitions:
         example: "2021-02-24 20:19:39"
         type: string
     type: object
-  github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest:
+  github_com_Raj63_golang-rest-api_pkg_domain_order.Request:
     properties:
       created_at:
         type: string
@@ -108,7 +108,7 @@ definitions:
         example: 2
         type: integer
     type: object
-  github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse:
+  github_com_Raj63_golang-rest-api_pkg_domain_order.Response:
     properties:
       created_at:
         type: string
@@ -452,7 +452,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest'
+            $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Request'
         "400":
           description: Bad Request
           schema:
@@ -478,7 +478,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse'
+              $ref: '#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Response'
             type: array
         "400":
           description: Bad Request

@@ -1,0 +1,30 @@
+[
+  {
+    "_id": "9733c356-32e0-4ed5-85a9-bb7fb01d6fe5",
+    "colName": "Menu",
+    "created": "2023-06-02T23:19:12.627Z",
+    "sortNum": 10000,
+    "folders": []
+  },
+  {
+    "_id": "74c115b8-36b1-426f-ab4a-37f84c70bf72",
+    "colName": "Order",
+    "created": "2023-06-06T10:45:53.802Z",
+    "sortNum": 20000,
+    "folders": []
+  },
+  {
+    "_id": "9115ed9d-2993-402d-b771-c57fdfddbe63",
+    "colName": "Diner",
+    "created": "2023-06-06T11:52:47.694Z",
+    "sortNum": 30000,
+    "folders": []
+  },
+  {
+    "_id": "fdb2f4d6-7dfc-4b5b-b468-4017238f051d",
+    "colName": "Instrumentations",
+    "created": "2023-06-06T19:23:05.728Z",
+    "sortNum": 40000,
+    "folders": []
+  }
+]

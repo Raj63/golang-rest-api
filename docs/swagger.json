@@ -419,7 +419,7 @@
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest"
+                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Request"
                         }
                     },
                     "400": {
@@ -459,7 +459,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse"
+                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Response"
                             }
                         }
                     },
@@ -652,7 +652,7 @@
                 }
             }
         },
-        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest": {
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.Request": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -676,7 +676,7 @@
                 }
             }
         },
-        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse": {
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.Response": {
             "type": "object",
             "properties": {
                 "created_at": {
