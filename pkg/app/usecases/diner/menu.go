@@ -5,12 +5,12 @@ import (
 	"context"
 
 	dinerDomain "github.com/Raj63/golang-rest-api/pkg/domain/diner"
-	dinerRepository "github.com/Raj63/golang-rest-api/pkg/infrastructure/repository/diner"
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 )
 
 // Service is a struct that contains the repository implementation for diner use case
 type Service struct {
-	DinerRepository dinerRepository.Repository
+	DinerRepository repository.Diners
 }
 
 // GetAll is a function that returns all diners

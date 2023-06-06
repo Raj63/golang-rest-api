@@ -3,8 +3,6 @@ package menu
 
 import (
 	"time"
-
-	domainMenu "github.com/Raj63/golang-rest-api/pkg/domain/menu"
 )
 
 // Menu is a struct that contains the menu model
@@ -21,15 +19,4 @@ type Menu struct {
 // TableName overrides the table name used by User to `users`
 func (*Menu) TableName() string {
 	return "menus"
-}
-
-// PaginationResultMenu is a struct that contains the pagination result for menu
-type PaginationResultMenu struct {
-	Data       *[]domainMenu.Menu
-	Total      int64
-	Limit      int64
-	Current    int64
-	NextCursor uint
-	PrevCursor uint
-	NumPages   int64
 }

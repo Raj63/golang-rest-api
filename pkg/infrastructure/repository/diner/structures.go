@@ -3,8 +3,6 @@ package diner
 
 import (
 	"time"
-
-	domainDiner "github.com/Raj63/golang-rest-api/pkg/domain/diner"
 )
 
 // Diner is a struct that contains the diner model
@@ -19,15 +17,4 @@ type Diner struct {
 // TableName overrides the table name used by User to `users`
 func (*Diner) TableName() string {
 	return "diners"
-}
-
-// PaginationResultDiner is a struct that contains the pagination result for diner
-type PaginationResultDiner struct {
-	Data       *[]domainDiner.Diner
-	Total      int64
-	Limit      int64
-	Current    int64
-	NextCursor uint
-	PrevCursor uint
-	NumPages   int64
 }

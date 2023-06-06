@@ -8,6 +8,7 @@ import (
 	domainDiner "github.com/Raj63/golang-rest-api/pkg/domain/diner"
 	"github.com/Raj63/golang-rest-api/pkg/domain/errors"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 	sdksql "github.com/Raj63/golang-rest-api/pkg/infrastructure/sql"
 )
 
@@ -29,7 +30,7 @@ func (r *Repository) GetTotalCount(ctx context.Context) (int64, error) {
 }
 
 // GetAll Fetch all diner data
-func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*PaginationResultDiner, error) {
+func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*repository.PaginationResultDiner, error) {
 	var diners []Diner
 	total, err := r.GetTotalCount(ctx)
 	if err != nil {
@@ -68,7 +69,7 @@ LIMIT ? OFFSET ?;`, limit, offset)
 		prevCursor = uint(page - 1)
 	}
 
-	return &PaginationResultDiner{
+	return &repository.PaginationResultDiner{
 		Data:       arrayToDomainMapper(&diners),
 		Total:      total,
 		Limit:      limit,
