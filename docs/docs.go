@@ -426,7 +426,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest"
+                            "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Request"
                         }
                     },
                     "400": {
@@ -466,7 +466,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse"
+                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_order.Response"
                             }
                         }
                     },
@@ -659,7 +659,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderRequest": {
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.Request": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -683,7 +683,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Raj63_golang-rest-api_pkg_domain_order.OrderResponse": {
+        "github_com_Raj63_golang-rest-api_pkg_domain_order.Response": {
             "type": "object",
             "properties": {
                 "created_at": {

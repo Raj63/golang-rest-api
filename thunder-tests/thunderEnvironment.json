@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "2e05144c-57e0-4f24-bce1-b8a2590c6fb5",
+    "name": "(Local Env)",
+    "default": false,
+    "global": true,
+    "local": true,
+    "sortNum": -1,
+    "created": "2023-06-02T23:18:26.873Z",
+    "modified": "2023-06-02T23:18:26.873Z",
+    "data": []
+  },
+  {
+    "_id": "89ae88df-7a6a-4e31-914d-7281422bd10f",
+    "name": "local",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2023-06-02T23:22:39.156Z",
+    "modified": "2023-06-02T23:22:39.156Z",
+    "data": [
+      {
+        "name": "host",
+        "value": "http://localhost:8080"
+      }
+    ]
+  }
+]

@@ -2,7 +2,15 @@ build:
 	docker build -t golang-rest-api .
 
 run:
-	docker run -p 8080:8080 golang-rest-api
+	docker-compose down
+	docker-compose up
+
+reload:
+	docker-compose down
+	docker image rm golang-rest-api
+	docker image rm golang-rest-api_app
+	docker build -t golang-rest-api .
+	docker-compose up
 
 test:
 	go test -count=1 -failfast -v -race ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html && go tool cover -func coverage.out
@@ -14,3 +22,7 @@ push:
 
 generate:
 	swag init -g pkg/infrastructure/rest/routes/routes.go
+
+db-update:
+	docker run golang-rest-api update-db
+	
