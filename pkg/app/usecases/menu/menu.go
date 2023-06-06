@@ -2,6 +2,8 @@
 package menu
 
 import (
+	"context"
+
 	menuDomain "github.com/Raj63/golang-rest-api/pkg/domain/menu"
 	menuRepository "github.com/Raj63/golang-rest-api/pkg/infrastructure/repository/menu"
 )
@@ -12,8 +14,8 @@ type Service struct {
 }
 
 // GetAll is a function that returns all menus
-func (s *Service) GetAll(page int64, limit int64) (*PaginationResultMenu, error) {
-	all, err := s.MenuRepository.GetAll(page, limit)
+func (s *Service) GetAll(ctx context.Context, page int64, limit int64) (*PaginationResultMenu, error) {
+	all, err := s.MenuRepository.GetAll(ctx, page, limit)
 	if err != nil {
 		return nil, err
 	}
@@ -30,17 +32,22 @@ func (s *Service) GetAll(page int64, limit int64) (*PaginationResultMenu, error)
 }
 
 // GetByID is a function that returns a menu by id
-func (s *Service) GetByID(id int) (*menuDomain.Menu, error) {
-	return s.MenuRepository.GetByID(id)
+func (s *Service) GetByID(ctx context.Context, id int64) (*menuDomain.Menu, error) {
+	return s.MenuRepository.GetByID(ctx, id)
+}
+
+// GetByTopCount is a function that returns a menu by top counts
+func (s *Service) GetByTopCount(ctx context.Context, count int) ([]menuDomain.Menu, error) {
+	return s.MenuRepository.GetByTopCount(ctx, count)
 }
 
 // Create is a function that creates a menu
-func (s *Service) Create(menu *NewMenu) (*menuDomain.Menu, error) {
+func (s *Service) Create(ctx context.Context, menu *NewMenu) (*menuDomain.Menu, error) {
 	menuModel := menu.toDomainMapper()
-	return s.MenuRepository.Create(menuModel)
+	return s.MenuRepository.Create(ctx, menuModel)
 }
 
 // Delete is a function that deletes a menu by id
-func (s *Service) Delete(id int) error {
-	return s.MenuRepository.Delete(id)
+func (s *Service) Delete(ctx context.Context, id int64) error {
+	return s.MenuRepository.Delete(ctx, id)
 }

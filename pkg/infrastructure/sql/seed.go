@@ -6,6 +6,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -19,10 +20,11 @@ type Seed struct {
 	db      *sqlx.DB
 	embedFS embed.FS
 	files   []string
+	logger  *logger.Logger
 }
 
 // NewSeed initialises the DB seeder with open connection.
-func NewSeed(config *Config, embedFS embed.FS) (*Seed, error) {
+func NewSeed(config *Config, embedFS embed.FS, logger *logger.Logger) (*Seed, error) {
 	entries, err := embedFS.ReadDir(dbSeedPath)
 	if err != nil {
 		return nil, err
@@ -47,7 +49,7 @@ func NewSeed(config *Config, embedFS embed.FS) (*Seed, error) {
 		return nil, err
 	}
 
-	return &Seed{config, db, embedFS, files}, nil
+	return &Seed{config, db, embedFS, files, logger}, nil
 }
 
 // Close closes the database and prevents new queries from starting.
@@ -68,6 +70,7 @@ func (s *Seed) Run() error {
 		}
 
 		if _, err := s.db.Exec(string(b)); err != nil {
+			s.logger.Errorf("error executing: %v", string(b))
 			return err
 		}
 	}

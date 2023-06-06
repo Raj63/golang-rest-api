@@ -1,26 +1,26 @@
-// Package menu contains the repository implementation for the menu entity
-package menu
+// Package diner contains the repository implementation for the diner entity
+package diner
 
 import (
 	"context"
 	"database/sql"
 
+	domainDiner "github.com/Raj63/golang-rest-api/pkg/domain/diner"
 	"github.com/Raj63/golang-rest-api/pkg/domain/errors"
-	domainMenu "github.com/Raj63/golang-rest-api/pkg/domain/menu"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
 	sdksql "github.com/Raj63/golang-rest-api/pkg/infrastructure/sql"
 )
 
-// Repository is a struct that contains the database implementation for menu entity
+// Repository is a struct that contains the database implementation for diner entity
 type Repository struct {
 	Store  *sdksql.DB
 	Logger *logger.Logger
 }
 
-// GetTotalCount Fetch total menu count
+// GetTotalCount Fetch total count of diners
 func (r *Repository) GetTotalCount(ctx context.Context) (int64, error) {
 	var total int64
-	err := r.Store.DB().Get(&total, `SELECT count(id) FROM menus`)
+	err := r.Store.DB().Get(&total, `SELECT count(id) FROM diners`)
 	if err != nil {
 		r.Logger.ErrorfContext(ctx, "error fetching total count: %v", err)
 		return 0, err
@@ -28,20 +28,20 @@ func (r *Repository) GetTotalCount(ctx context.Context) (int64, error) {
 	return total, nil
 }
 
-// GetAll Fetch all menu data
-func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*PaginationResultMenu, error) {
-	var menus []Menu
+// GetAll Fetch all diner data
+func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*PaginationResultDiner, error) {
+	var diners []Diner
 	total, err := r.GetTotalCount(ctx)
 	if err != nil {
 		return nil, err
 	}
 	offset := (page - 1) * limit
 
-	// Read menu from DB based on limit and offset
+	// Read diner from DB based on limit and offset
 	rows, err := r.Store.DB().Queryx(`
 SELECT
-	id, name, description, price, created_at, updated_at 
-FROM menus
+	id, name, table_no, created_at, updated_at 
+FROM diners
 ORDER BY
 	name ASC
 LIMIT ? OFFSET ?;`, limit, offset)
@@ -51,12 +51,12 @@ LIMIT ? OFFSET ?;`, limit, offset)
 	defer rows.Close()
 
 	for rows.Next() {
-		var menu Menu
-		err := rows.StructScan(&menu)
+		var diner Diner
+		err := rows.StructScan(&diner)
 		if err != nil {
 			r.Logger.ErrorfContext(ctx, "error when iterating rows. error %+v", err)
 		}
-		menus = append(menus, menu)
+		diners = append(diners, diner)
 	}
 
 	numPages := (total + limit - 1) / limit
@@ -68,8 +68,8 @@ LIMIT ? OFFSET ?;`, limit, offset)
 		prevCursor = uint(page - 1)
 	}
 
-	return &PaginationResultMenu{
-		Data:       arrayToDomainMapper(&menus),
+	return &PaginationResultDiner{
+		Data:       arrayToDomainMapper(&diners),
 		Total:      total,
 		Limit:      limit,
 		Current:    page,
@@ -80,15 +80,15 @@ LIMIT ? OFFSET ?;`, limit, offset)
 }
 
 // Create ... Insert New data
-func (r *Repository) Create(ctx context.Context, newMenu *domainMenu.Menu) (*domainMenu.Menu, error) {
-	menu := fromDomainMapper(newMenu)
+func (r *Repository) Create(ctx context.Context, newDiner *domainDiner.Diner) (*domainDiner.Diner, error) {
+	diner := fromDomainMapper(newDiner)
 	// store into DB
 	tx, err := r.Store.DB().Beginx()
 	if err != nil {
 		return nil, err
 	}
 	// Named queries can use structs, so if you have an existing struct (i.e. person := &Person{}) that you have populated, you can pass it in as &person
-	result, err := tx.NamedExecContext(ctx, "INSERT INTO menus (name, description, price, created_at, updated_at) VALUES (:name, :description, :price, NOW(), NOW());", menu)
+	result, err := tx.NamedExecContext(ctx, "INSERT INTO diners (name, table_no, created_at, updated_at) VALUES (:name, :table_no, NOW(), NOW());", diner)
 	if err != nil {
 		_ = tx.Rollback()
 		return nil, err
@@ -109,43 +109,26 @@ func (r *Repository) Create(ctx context.Context, newMenu *domainMenu.Menu) (*dom
 		r.Logger.ErrorfContext(ctx, "Commit failed: %v", err)
 		return nil, err
 	}
-	return menu.toDomainMapper(), nil
+	return diner.toDomainMapper(), nil
 }
 
-// GetByID ... Fetch only one menu by Id
-func (r *Repository) GetByID(ctx context.Context, id int64) (*domainMenu.Menu, error) {
-	var menu Menu
+// GetByID ... Fetch only one diner by Id
+func (r *Repository) GetByID(ctx context.Context, id int64) (*domainDiner.Diner, error) {
+	var diner Diner
 
-	err := r.Store.DB().Get(&menu, `SELECT id, name, description, price, created_at, updated_at FROM menus WHERE id = ?;`, id)
+	err := r.Store.DB().Get(&diner, `SELECT id, name, table_no, created_at, updated_at FROM diners WHERE id=?;`, id)
 	if err != nil {
 		return nil, err
 	}
 
-	return menu.toDomainMapper(), nil
+	return diner.toDomainMapper(), nil
 }
 
-// GetByTopCount ... Fetch only top menus by count
-func (r *Repository) GetByTopCount(ctx context.Context, count int) ([]domainMenu.Menu, error) {
-	var menus []Menu
-
-	err := r.Store.DB().Select(&menus, `SELECT m.id, m.name, m.description, m.price, SUM(o.quantity) AS count
-	FROM menus m
-	JOIN orders o ON m.id = o.menu_id
-	GROUP BY m.id, m.name
-	ORDER BY count DESC
-	LIMIT ?;`, count)
-	if err != nil {
-		return nil, err
-	}
-
-	return *arrayToDomainMapper(&menus), nil
-}
-
-// Delete ... Delete menu
+// Delete ... Delete diner
 func (r *Repository) Delete(ctx context.Context, id int64) (err error) {
 	result, err := r.Store.DB().ExecContext(ctx, `
 	DELETE FROM
-		menus
+		diners
 	WHERE id = ?;
 	`, id)
 	if err != nil {

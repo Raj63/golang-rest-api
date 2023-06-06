@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/caarlos0/env"
+	"github.com/caarlos0/env/v6"
 )
 
 // AppConfig maps the environment variables into a struct.

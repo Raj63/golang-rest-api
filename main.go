@@ -52,7 +52,10 @@ func main() {
 	}
 
 	// database connection
-	_database := sdksql.NewDB(&sdksql.Config{}, _logger)
+	_database := sdksql.NewDB(&sdksql.Config{
+		DriverName: sdksql.MYSQL,
+		URI:        _config.PrimaryDBUri,
+	}, _logger)
 
 	var httpServer, httpsServer *http.Server
 
@@ -101,7 +104,7 @@ func main() {
 			log.Fatalln(err)
 		}
 
-		routes.ApplicationV1Router(router, _database)
+		routes.ApplicationV1Router(router, _database, _logger)
 
 		httpServer, err = server.NewServer(server.DI{
 			Config:                        _config,
@@ -131,7 +134,7 @@ func main() {
 			_logger.Errorf("error setting up HTTPS basic middlewares: %v", err)
 			log.Fatalln(err)
 		}
-		routes.ApplicationV1Router(router, _database)
+		routes.ApplicationV1Router(router, _database, _logger)
 
 		httpsServer, err = server.NewServer(server.DI{
 			Config:                        _config,
@@ -155,8 +158,8 @@ func main() {
 		HTTPServer:  httpServer,
 		HTTPSServer: httpsServer,
 		Logger:      _logger,
-		//DB:          _database,
-		EmbedFS: embedFS,
+		DB:          _database,
+		EmbedFS:     embedFS,
 	})
 	if err := cli.Execute(); err != nil {
 		os.Exit(1)

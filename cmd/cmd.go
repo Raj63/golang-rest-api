@@ -25,9 +25,9 @@ type CommandDI struct {
 // NewCommand returns a new Set of commands for the given server
 func NewCommand(di CommandDI) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "embedqr-web",
-		Long:  "The embedqr-web service for hosting public endpoints and web pages.",
-		Short: "The embedqr-web is a web service.",
+		Use:   "golang-rest-api",
+		Long:  "The golang-rest-api service for hosting public endpoints and web pages.",
+		Short: "The golang-rest-api is a web service.",
 		CompletionOptions: cobra.CompletionOptions{
 			DisableDefaultCmd: true,
 		},
@@ -46,7 +46,7 @@ func NewCommand(di CommandDI) *cobra.Command {
 func serveCommand(di CommandDI) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "serve",
-		Short: "Run the gRPC/HTTP server",
+		Short: "Run the HTTP server",
 		Run: func(cmd *cobra.Command, args []string) {
 			defer func() {
 				if err := di.Logger.Sync(); err != nil {
@@ -64,6 +64,7 @@ func serveCommand(di CommandDI) *cobra.Command {
 				defer di.DB.Close()
 			}
 
+			di.Logger.Info("Server initiating...")
 			// serve HTTP server
 			if di.HTTPServer != nil {
 				serve(di.HTTPServer, di.Logger)

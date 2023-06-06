@@ -7,8 +7,9 @@ import (
 
 // NewMenu is a struct that contains the data for a new menu
 type NewMenu struct {
-	Name        string `json:"name" example:"Paracetamol"`
-	Description string `json:"description" example:"Some Description"`
+	Name        string  `json:"name" example:"Paracetamol"`
+	Description string  `json:"description" example:"Some Description"`
+	Price       float64 `json:"price" example:"200.50"`
 }
 
 // PaginationResultMenu is a struct that contains the pagination result for menu

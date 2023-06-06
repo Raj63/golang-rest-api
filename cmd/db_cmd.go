@@ -74,7 +74,7 @@ func DBSeedUp(logger *logger.Logger, db *sdksql.DB, embedFS embed.FS) {
 	msg := "Seeding '%s' database...%s\n"
 	logger.Infof(msg, "/db/migrate/primary", "")
 
-	s, err := sdksql.NewSeed(db.Config(), embedFS)
+	s, err := sdksql.NewSeed(db.Config(), embedFS, logger)
 	if err != nil {
 		logger.Fatalln(err)
 	}
