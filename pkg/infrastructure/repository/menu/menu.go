@@ -8,6 +8,7 @@ import (
 	"github.com/Raj63/golang-rest-api/pkg/domain/errors"
 	domainMenu "github.com/Raj63/golang-rest-api/pkg/domain/menu"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 	sdksql "github.com/Raj63/golang-rest-api/pkg/infrastructure/sql"
 )
 
@@ -29,7 +30,7 @@ func (r *Repository) GetTotalCount(ctx context.Context) (int64, error) {
 }
 
 // GetAll Fetch all menu data
-func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*PaginationResultMenu, error) {
+func (r *Repository) GetAll(ctx context.Context, page int64, limit int64) (*repository.PaginationResultMenu, error) {
 	var menus []Menu
 	total, err := r.GetTotalCount(ctx)
 	if err != nil {
@@ -68,7 +69,7 @@ LIMIT ? OFFSET ?;`, limit, offset)
 		prevCursor = uint(page - 1)
 	}
 
-	return &PaginationResultMenu{
+	return &repository.PaginationResultMenu{
 		Data:       arrayToDomainMapper(&menus),
 		Total:      total,
 		Limit:      limit,

@@ -5,12 +5,12 @@ import (
 	"context"
 
 	menuDomain "github.com/Raj63/golang-rest-api/pkg/domain/menu"
-	menuRepository "github.com/Raj63/golang-rest-api/pkg/infrastructure/repository/menu"
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 )
 
 // Service is a struct that contains the repository implementation for menu use case
 type Service struct {
-	MenuRepository menuRepository.Repository
+	MenuRepository repository.Menus
 }
 
 // GetAll is a function that returns all menus

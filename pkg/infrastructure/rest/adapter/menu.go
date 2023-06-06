@@ -12,6 +12,6 @@ import (
 // MenuAdapter is a function that returns a menu controller
 func MenuAdapter(db *sdksql.DB, logger *logger.Logger) *menuController.Controller {
 	mRepository := menuRepository.Repository{Store: db, Logger: logger}
-	service := menuService.Service{MenuRepository: mRepository}
+	service := menuService.Service{MenuRepository: &mRepository}
 	return &menuController.Controller{MenuService: service}
 }

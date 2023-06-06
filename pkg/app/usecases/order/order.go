@@ -5,12 +5,12 @@ import (
 	"context"
 
 	orderDomain "github.com/Raj63/golang-rest-api/pkg/domain/order"
-	orderRepository "github.com/Raj63/golang-rest-api/pkg/infrastructure/repository/order"
+	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 )
 
 // Service is a struct that contains the repository implementation for order use case
 type Service struct {
-	OrderRepository orderRepository.Repository
+	OrderRepository repository.Orders
 }
 
 // GetByID is a function that returns a order by diner ID

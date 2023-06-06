@@ -12,6 +12,6 @@ import (
 // DinerAdapter is a function that returns a diner controller
 func DinerAdapter(db *sdksql.DB, logger *logger.Logger) *dinerController.Controller {
 	mRepository := dinerRepository.Repository{Store: db, Logger: logger}
-	service := dinerService.Service{DinerRepository: mRepository}
+	service := dinerService.Service{DinerRepository: &mRepository}
 	return &dinerController.Controller{DinerService: service}
 }
