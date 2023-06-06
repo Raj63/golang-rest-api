@@ -12,19 +12,38 @@ services:
       - db
     environment:
       - APP_ENV=development
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USERNAME=root
+      - PRIMARY_DB_URI=root:secret@tcp(db:3306)/restaurant?multiStatements=true&parseTime=true
+      - DB_USERNAME=developer
+      - DB_ROOT_USERNAME=root
       - DB_PASSWORD=secret
-      - DB_NAME=restaurant
+    networks:
+      - go-network
+    # healthcheck:
+    #   test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u${DB_ROOT_USERNAME}", "-p${DB_PASSWORD}"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 10
+    # command: sh -c 'sleep 3 && ./golang-rest-api serve'
 
   db:
     platform: linux/x86_64
     image: mysql:5.7
     environment:
+      - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_USER=developer
+      - MYSQL_PASSWORD=secret
       - MYSQL_DATABASE=restaurant
+      - MYSQL_HOST="%"
+    mem_limit: 600m
     ports:
       - 3306:3306
     volumes:
       - ./data:/var/lib/mysql
+    networks:
+      - go-network
+
+
+networks:
+  go-network:
+    driver: bridge
