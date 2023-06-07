@@ -64,3 +64,17 @@ repos:
     #
     -   id: my-cmd
         args: [ go, generate, ./... ]
+
+  - repo: local
+    hooks:
+    -   id: api-docs-generate
+        name: API Docs - Generate
+        entry: make generate
+        language: system
+    
+    -   id: api-mocks-generate
+        name: API Mocks - Generate
+        entry: make generate-mocks
+        language: system
+
+      

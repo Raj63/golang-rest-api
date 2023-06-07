@@ -203,12 +203,12 @@
     "method": "POST",
     "sortNum": 20000,
     "created": "2023-06-06T13:09:29.125Z",
-    "modified": "2023-06-06T20:20:05.410Z",
+    "modified": "2023-06-07T07:54:11.917Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"diner_id\": 2,\n  \"menu_id\": 8,\n  \"quantity\": 5\n}",
+      "raw": "{\n  \"diner_id\": 1,\n  \"menu_id\": 3,\n  \"quantity\": 1\n}",
       "form": []
     },
     "tests": [

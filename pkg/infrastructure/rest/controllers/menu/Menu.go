@@ -51,7 +51,7 @@ func (c *Controller) NewMenu(ctx *gin.Context) {
 
 	result, err = c.MenuService.Create(ctx.Request.Context(), &newMenu)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -88,7 +88,7 @@ func (c *Controller) GetAllMenus(ctx *gin.Context) {
 
 	menus, err := c.MenuService.GetAll(ctx.Request.Context(), page, limit)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 	ctx.JSON(http.StatusOK, menus)
@@ -114,7 +114,7 @@ func (c *Controller) GetTopMenus(ctx *gin.Context) {
 
 	domainMenu, err := c.MenuService.GetByTopCount(ctx.Request.Context(), count)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -141,7 +141,7 @@ func (c *Controller) GetMenusByID(ctx *gin.Context) {
 
 	domainMenu, err := c.MenuService.GetByID(ctx.Request.Context(), menuID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -168,7 +168,7 @@ func (c *Controller) DeleteMenu(ctx *gin.Context) {
 
 	err = c.MenuService.Delete(ctx.Request.Context(), menuID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "resource deleted successfully"})

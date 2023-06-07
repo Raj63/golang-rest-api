@@ -20,9 +20,15 @@ push:
     docker tag golang-rest-api <your-registry>/golang-rest-api:<version>
     docker push <your-registry>/golang-rest-api:<version>
 
+generate-mocks:
+	mockgen -source=pkg/infrastructure/repository/diner.go -destination=pkg/infrastructure/mocks/repository/diner.go -package mocks
+	mockgen -source=pkg/infrastructure/repository/menu.go -destination=pkg/infrastructure/mocks/repository/menu.go -package mocks
+	mockgen -source=pkg/infrastructure/repository/order.go -destination=pkg/infrastructure/mocks/repository/order.go -package mocks
+
 generate:
 	swag init -g pkg/infrastructure/rest/routes/routes.go
 
 db-update:
 	docker run golang-rest-api update-db
+
 	

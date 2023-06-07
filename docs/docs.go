@@ -54,7 +54,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner"
+                                "$ref": "#/definitions/diner.PaginationResultDiner"
                             }
                         }
                     },
@@ -220,7 +220,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu"
+                                "$ref": "#/definitions/menu.PaginationResultMenu"
                             }
                         }
                     },
@@ -536,12 +536,13 @@ const docTemplate = `{
         "diner.NewDinerRequest": {
             "type": "object",
             "required": [
-                "name"
+                "name",
+                "table_no"
             ],
             "properties": {
                 "name": {
                     "type": "string",
-                    "example": "Paracetamol"
+                    "example": "Mr. Smith"
                 },
                 "table_no": {
                     "type": "integer",
@@ -549,7 +550,7 @@ const docTemplate = `{
                 }
             }
         },
-        "github_com_Raj63_golang-rest-api_pkg_app_usecases_diner.PaginationResultDiner": {
+        "diner.PaginationResultDiner": {
             "type": "object",
             "properties": {
                 "current": {
@@ -559,35 +560,6 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_diner.Diner"
-                    }
-                },
-                "limit": {
-                    "type": "integer"
-                },
-                "nextCursor": {
-                    "type": "integer"
-                },
-                "numPages": {
-                    "type": "integer"
-                },
-                "prevCursor": {
-                    "type": "integer"
-                },
-                "total": {
-                    "type": "integer"
-                }
-            }
-        },
-        "github_com_Raj63_golang-rest-api_pkg_app_usecases_menu.PaginationResultMenu": {
-            "type": "object",
-            "properties": {
-                "current": {
-                    "type": "integer"
-                },
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu"
                     }
                 },
                 "limit": {
@@ -745,6 +717,35 @@ const docTemplate = `{
                 }
             }
         },
+        "menu.PaginationResultMenu": {
+            "type": "object",
+            "properties": {
+                "current": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Raj63_golang-rest-api_pkg_domain_menu.Menu"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "nextCursor": {
+                    "type": "integer"
+                },
+                "numPages": {
+                    "type": "integer"
+                },
+                "prevCursor": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
         "order.MessageResponse": {
             "type": "object",
             "properties": {
@@ -788,6 +789,8 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "Documentation's Golang REST APIs",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {

@@ -4,12 +4,14 @@ package menu
 import (
 	"context"
 	"database/sql"
+	"errors"
 
-	"github.com/Raj63/golang-rest-api/pkg/domain/errors"
+	appErr "github.com/Raj63/golang-rest-api/pkg/domain/errors"
 	domainMenu "github.com/Raj63/golang-rest-api/pkg/domain/menu"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/repository"
 	sdksql "github.com/Raj63/golang-rest-api/pkg/infrastructure/sql"
+	"github.com/go-sql-driver/mysql"
 )
 
 // Repository is a struct that contains the database implementation for menu entity
@@ -92,6 +94,10 @@ func (r *Repository) Create(ctx context.Context, newMenu *domainMenu.Menu) (*dom
 	result, err := tx.NamedExecContext(ctx, "INSERT INTO menus (name, description, price, created_at, updated_at) VALUES (:name, :description, :price, NOW(), NOW());", menu)
 	if err != nil {
 		_ = tx.Rollback()
+		var mysqlErr *mysql.MySQLError
+		if errors.As(err, &mysqlErr) && mysqlErr.Number == 1062 {
+			return nil, appErr.NewAppErrorWithType(appErr.ResourceAlreadyExists)
+		}
 		return nil, err
 	}
 
@@ -157,7 +163,7 @@ func (r *Repository) Delete(ctx context.Context, id int64) (err error) {
 	rowAffected, errGetAffectedRow := result.RowsAffected()
 	if errGetAffectedRow != nil || rowAffected == 0 {
 		r.Logger.Errorf("error when get affected row. error: %+v", errGetAffectedRow)
-		return errors.NewAppErrorWithType(errors.NotFound)
+		return appErr.NewAppErrorWithType(appErr.NotFound)
 	}
 
 	return nil
