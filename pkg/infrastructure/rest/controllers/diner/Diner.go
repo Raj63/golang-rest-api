@@ -50,7 +50,7 @@ func (c *Controller) NewDiner(ctx *gin.Context) {
 
 	result, err = c.DinerService.Create(ctx.Request.Context(), &newDiner)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -87,7 +87,7 @@ func (c *Controller) GetAllDiners(ctx *gin.Context) {
 
 	diners, err := c.DinerService.GetAll(ctx.Request.Context(), page, limit)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 	ctx.JSON(http.StatusOK, diners)
@@ -113,7 +113,7 @@ func (c *Controller) GetDinersByID(ctx *gin.Context) {
 
 	domainDiner, err := c.DinerService.GetByID(ctx.Request.Context(), dinerID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -140,7 +140,7 @@ func (c *Controller) DeleteDiner(ctx *gin.Context) {
 
 	err = c.DinerService.Delete(ctx.Request.Context(), dinerID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "resource deleted successfully"})

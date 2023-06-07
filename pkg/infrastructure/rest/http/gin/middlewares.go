@@ -8,7 +8,6 @@ import (
 
 	healthcheck "github.com/RaMin0/gin-health-check"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/logger"
-	"github.com/Raj63/golang-rest-api/pkg/infrastructure/rest/http/gin/errors"
 	"github.com/Raj63/golang-rest-api/pkg/infrastructure/rest/http/gin/ratelimiter"
 
 	"github.com/chenjiandongx/ginprom"
@@ -195,7 +194,7 @@ func AddBasicHandlers(router *gin.Engine, config *MiddlewaresConfig, logger *log
 	}
 
 	// Setup Error handler
-	router.Use(errors.Handler)
+	// router.Use(errors.Handler)
 	return nil
 }
 

@@ -43,7 +43,8 @@ mkShell {
       which enumer || go install github.com/dmarkham/enumer@v1.5.3
       which gocritic || go install github.com/go-critic/go-critic/cmd/gocritic@latest
       which goreturns || go install github.com/sqs/goreturns@latest
-      which swag || go install github.com/swaggo/swag/cmd/swag@latest
+      which swag || go get -u github.com/swaggo/swag
+      which mockgen || go install github.com/golang/mock/mockgen@v1.6.0
       
       # Add the repo shared gitconfig
       git config --local include.path ../.gitconfig

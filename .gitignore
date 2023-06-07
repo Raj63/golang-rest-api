@@ -5,3 +5,4 @@ config.json
 golang-rest-api
 data/*
 .gitconfig*
+coverage*

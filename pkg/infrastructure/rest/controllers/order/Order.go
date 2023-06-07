@@ -51,7 +51,7 @@ func (c *Controller) NewOrder(ctx *gin.Context) {
 
 	result, err = c.OrderService.Create(ctx.Request.Context(), &newOrder)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -78,7 +78,7 @@ func (c *Controller) GetOrdersByDinerID(ctx *gin.Context) {
 
 	domainOrders, err := c.OrderService.GetByID(ctx.Request.Context(), orderID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 
@@ -105,7 +105,7 @@ func (c *Controller) DeleteOrder(ctx *gin.Context) {
 
 	err = c.OrderService.Delete(ctx.Request.Context(), orderID)
 	if err != nil {
-		_ = ctx.Error(domainErrors.NewAppError(err, domainErrors.RepositoryError))
+		_ = ctx.Error(err)
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "resource deleted successfully"})
