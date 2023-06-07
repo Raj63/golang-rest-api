@@ -32,6 +32,10 @@ A sample production grade REST API application written in Golang with minimal bu
 
 - Run command `make generate`
 
+## Test Application Server
+
+- Run command `make test`
+  
 ## Build Application Server
 
 - Run command `make build`
