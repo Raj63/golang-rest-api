@@ -15,11 +15,6 @@ reload:
 test:
 	go test -count=1 -failfast -v -race ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html && go tool cover -func coverage.out
 
-# Push the Docker image to the registry
-push:
-    docker tag golang-rest-api <your-registry>/golang-rest-api:<version>
-    docker push <your-registry>/golang-rest-api:<version>
-
 generate-mocks:
 	mockgen -source=pkg/infrastructure/repository/diner.go -destination=pkg/infrastructure/mocks/repository/diner.go -package mocks
 	mockgen -source=pkg/infrastructure/repository/menu.go -destination=pkg/infrastructure/mocks/repository/menu.go -package mocks
